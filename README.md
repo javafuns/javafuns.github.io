@@ -1,3 +1,3 @@
 For site of javafuns.github.io, there would be following contents:
-1. blog posts
+1. java notes
 2. code snippet
