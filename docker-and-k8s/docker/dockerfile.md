@@ -7,7 +7,7 @@ FROM
 
 {% for post in site.posts %}
 
-{% post.url %}
+{{ post.url }}
 
 {% endfor %}
 
