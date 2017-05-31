@@ -8,3 +8,9 @@ tags: docker k8s micrservices cloud
 
 FROM
 
+{% for post in site.posts %}
+
+{{ post.url }}
+
+{% endfor %}
+
