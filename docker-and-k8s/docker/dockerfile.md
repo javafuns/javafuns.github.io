@@ -1,7 +1,10 @@
 ---
 title: this is titile
-description: Dockerfile instructions
+layout: default
 ---
 
 FROM
 
+{% for post in site.posts %}
+	{% include post-grid.html %}
+{% endfor %}
