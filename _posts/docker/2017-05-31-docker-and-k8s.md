@@ -2,7 +2,7 @@
 layout: post
 title:  "How to write a Dockerfile!"
 date:   2017-05-31 16:56:01 +0800
-categories: docker
+categories: posts/docker
 tags: docker
 ---
 
