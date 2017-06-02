@@ -5,8 +5,31 @@ logo:
 disqus_shortname:
 markdown:
 timezone:
+
 collections:
   pages:
     layout: default
     output: true
     permalink: /:collection/:path
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      author: "Gavin Zhang"
+      layout: "default"
+      #permalink: /:title
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      permalink: /posts/:categories/:year/:month/:day/:title
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
