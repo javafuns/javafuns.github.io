@@ -5,5 +5,5 @@ title: Hello GitHub
 I'm hosted with GitHub Pages.
 
 ### Todo list:
-- [ ] Linkerd - http://dockone.io/article/1032
-- [ ] Istio - https://istio.io/
+- [ ] Linkerd - [http://dockone.io/article/1032](http://dockone.io/article/1032)
+- [ ] Istio - [https://istio.io/](https://istio.io/)
