@@ -16,6 +16,7 @@ Dockerfile 是一个文本文件, 包含了用于装配 docker image 的一系�
 Dockerfile 的第一条指令必须是 From, 用于指定从哪个 base image 开始创建.
 
 NOTE: 某些情况下, 比如需要更改 escape 字符, 需使用 parser directive 指令并置于 Dockerfile 最顶部(FROM 指令之前)
+
 例如:
 ```
 # escape=` // default is backslash '\'
@@ -53,16 +54,138 @@ RUN 命令有 2 种形式:
 
 exec 形式可用于 base image 不包含 shell 的情况. Shell 形式的默认 shell 可通过 SHELL 命令去更改.
 
-使用 Shell 形式, 可以使用 \ 把单一命令写成多行形式.
+使用 Shell 形式的时候, 可以使用 \ 把一行命令写成多行便于阅读.
+
+Note:  
+与 shell 形式不同, exec 形式不调用 shell 命令. 这意味着 shell 形式不会有常规的 shell 处理. 例如, RUN [ "echo", "$HOME" ] 不会为 $HOME 变量做替换. 如果想要有 shell 处理, 那么或者使用 shell 形式或者直接执行一个 shell, 例如: RUN [ "sh", "-c", "echo $HOME" ]. 
+
 ## CMD
+CMD 命令的主要用意是为 container 提供默认的命令或参数, 当运行一个 image 的时候, 该命令就会被执行.
+
+CMD 命令有 3 种形式:
+- CMD ["executable","param1","param2"] (exec form, this is the preferred form)
+- CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
+- CMD command param1 param2 (shell form)
+
+Note:
+- 如果 CMD 是用于为 ENTRYPOINT 指令提供默认参数, CMD 和 ENTRYPOINT 指令都应该以 JSON array 格式在 Dockerfile 中定义.
+- 如果用户在 docker run 命令中指定了参数, 那么这些参数将覆盖用 CMD 指令所定义的默认值.
+- 在 Dockerfile 里只能有一个 CMD 指令. 如果列出了多个 CMD 指令, 那么也只有最后一个 CMD 会起作用.
+- 不要混淆 RUN 和 CMD. RUN 实际上只在 build time 运行命令并提交结果; CMD 在 build time 并不执行任何命令, 但为 image 指定了运行 container 时想要执行的命令.
+
+## ENTRYPOINT
+ENTRYPOINT 指令有 2 种形式:
+```
+ENTRYPOINT ["executable", "param1", "param2"] (exec form, preferred)
+ENTRYPOINT command param1 param2 (shell form)
+```
+
+ENTRYPOINT 指令允许你配置 container 作为一个可执行文件去运行.
+
+例如, 以下命令会启动 nginx 并监听 80 端口:
+```
+docker run -i -t --rm -p 80:80 nginx
+```
+
+docker run <image> 的命令行参数会附加在 exec 形式的 ENTRYPOINT 命令之后, 且会覆盖掉所有通过 CMD 指令指定的参数. 这种方式允许允许传递参数给 entry point, 即 docker run <image> -d 会传递 -d 参数给 entry point. 你可以通过 docker run --entrypoint flag 覆盖 ENTRYPOINT 指令.
+
+Shell 形式可防止使用任何 CMD 或 run 命令行参数, 但有一个缺点就是你的 ENTRYPOINT 是以 /bin/sh -c 的子命令开始的, 这种情况下不会传递信号(pass signals). 这意味着执行进程不是 container’s PID 1 - 并且不会接收 Unix signals - 所以你的执行进程不会从 docker stop <contaienr> 命令接收到 SIGTERM.
+
+Dockerfile 文件中只有最后一个 ENTRYPOINT 指令起作用, 之前的 ENTRYPOINT 指令会被忽略.
+
+## LABEL
+LABEL 指令可为 image 添加元数据. 一个 label 是一个 key/value pair. 一个 image 可以有多个 LABEL. Docker 官方建议多个 labels 使用一个 LABEL 指令去定义.
+
+如果使用多个 LABEL 指令, 每个 LABEL 指令都会产生一个新的 layer, 这会导致多个效率低下的 image.
+
+```
+LABEL <key>=<value> <key>=<value> <key>=<value> ...
+```
+
+## MAINTAINER (deprecated)
+Docker 官方建议使用 LABEL 指令:
+```
+LABEL maintainer "javafuns@about.me"
+```
+
+## EXPOSE
+```
+EXPOSE <port> [<port>...]
+```
+EXPOSE 指令告诉 Docker 该 container 在运行时所监听的网络端口. EXPOSE 指令并不会使该端口对宿主机(host)可见(accessible). 要想让宿主机访问 container 的端口, 在 docker run 时必须使用 -p flag 公开一组端口范围或使用 -P flag 公开所有 exposed ports. expose 端口和公开给外部访问的端口不要求是同一个 number.
+
+## ENV
+```
+ENV <key> <value>
+ENV <key>=<value> ...
+```
+ENV 指令设置环境变量. 设置过的环境变量对后续的 Dockerfile 命令都是可见的.
+
+与 LABEL 指令一样, 如果想设置多个环境变量, 尽可能使用一个 ENV 指令完成设置.
+
+## ADD
+ADD 指令复制文件, 目录或者远程文件 (remote file URLs) 并把它们添加到 image 文件系统中.
+
+ADD 指令有 2 种形式:
+```
+ADD <src>... <dest>
+ADD ["<src>",... "<dest>"] (this form is required for paths containing whitespace)
+```
+可以指定多个 <src> resource, 但是如果它们是文件或者目录的话, 它们必须是相对于当前编译目录的相对目录 (relative to the source directory that is being built (the context of the build)).
+
+\<dest\> 是 container 中的绝对路径, 或者是相对 WORKDIR 的相对路径.
+
+ADD 指令须遵从如下规则:
+- The <src> path must be inside the context of the build; you cannot ADD ../something /something, because the first step of a docker build is to send the context directory (and subdirectories) to the docker daemon.
+- If <src> is a URL and <dest> does not end with a trailing slash, then a file is downloaded from the URL and copied to <dest>.
+- If <src> is a URL and <dest> does end with a trailing slash, then the filename is inferred from the URL and the file is downloaded to <dest>/<filename>. For instance, ADD http://example.com/foobar / would create the file /foobar. The URL must have a nontrivial path so that an appropriate filename can be discovered in this case (http://example.com will not work).
+- If <src> is a directory, the entire contents of the directory are copied, including filesystem metadata.
+Note: The directory itself is not copied, just its contents.
+- If <src> is a local tar archive in a recognized compression format (identity, gzip, bzip2 or xz) then it is unpacked as a directory. Resources from remote URLs are not decompressed. When a directory is copied or unpacked, it has the same behavior as tar -x, the result is the union of:
+  - Whatever existed at the destination path and
+  - The contents of the source tree, with conflicts resolved in favor of “2.” on a file-by-file basis.  
+Note: Whether a file is identified as a recognized compression format or not is done solely based on the contents of the file, not the name of the file. For example, if an empty file happens to end with .tar.gz this will not be recognized as a compressed file and will not generate any kind of decompression error message, rather the file will simply be copied to the destination.
+- If <src> is any other kind of file, it is copied individually along with its metadata. In this case, if <dest> ends with a trailing slash /, it will be considered a directory and the contents of <src> will be written at <dest>/base(<src>).
+- If multiple <src> resources are specified, either directly or due to the use of a wildcard, then <dest> must be a directory, and it must end with a slash /.
+- If <dest> does not end with a trailing slash, it will be considered a regular file and the contents of <src> will be written at <dest>.
+- If <dest> doesn’t exist, it is created along with all missing directories in its path.
+
+## COPY
+COPY 指令有 2 种形式:
+```
+COPY <src>... <dest>
+COPY ["<src>",... "<dest>"] (this form is required for paths containing whitespace)
+```
+COPY 指令复制新文件和目录并把它们加入到 container 文件系统中.
+
+可以指定多个 <src> resource, 但是它们必须是相对于当前编译目录的相对目录.
+
+\<dest\> 是 container 中的绝对路径, 或者是相对 WORKDIR 的相对路径.
+```
+COPY test relativeDir/   # adds "test" to `WORKDIR`/relativeDir/
+COPY test /absoluteDir/  # adds "test" to /absoluteDir/
+```
+
+COPY 遵从如下规则:
+- The <src> path must be inside the context of the build; you cannot COPY ../something /something, because the first step of a docker build is to send the context directory (and subdirectories) to the docker daemon.
+- If <src> is a directory, the entire contents of the directory are copied, including filesystem metadata.
+Note: The directory itself is not copied, just its contents.
+- If <src> is any other kind of file, it is copied individually along with its metadata. In this case, if <dest> ends with a trailing slash /, it will be considered a directory and the contents of <src> will be written at <dest>/base(<src>).
+- If multiple <src> resources are specified, either directly or due to the use of a wildcard, then <dest> must be a directory, and it must end with a slash /.
+- If <dest> does not end with a trailing slash, it will be considered a regular file and the contents of <src> will be written at <dest>.
+- If <dest> doesn’t exist, it is created along with all missing directories in its path.
 
 ## .dockerignore file
 
 # FAQ
-### Dockerfile 中指令之间是否有依赖关系?
+## Dockerfile 中指令之间是否有依赖关系?
 No, The RUN instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile. 
 
 The core concepts of Docker where commits are cheap and containers can be created from any point in an image’s history, much like source control.
 
-### RUN, CMD, ENTRYPOINT 区别
+## 为什么要把多个命令 RUN apt-get update && apt-get install -y --force-yes apache2 写到一行?
+cache 失效问题
 
+## RUN, CMD, ENTRYPOINT 区别
+
+## ADD 和 COPY 区别
