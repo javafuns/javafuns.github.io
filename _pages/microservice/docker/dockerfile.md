@@ -93,6 +93,22 @@ Shell 形式可防止使用任何 CMD 或 run 命令行参数, 但有一个缺�
 
 Dockerfile 文件中只有最后一个 ENTRYPOINT 指令起作用, 之前的 ENTRYPOINT 指令会被忽略.
 
+### 理解 CMD 和 ENTRYPOINT 如何交互
+CMD 和 ENTRYPOINT 指令都定义了在运行 container 时执行何种命令. 如下规则描述了它们之间如何协作.
+- Dockerfile should specify at least one of CMD or ENTRYPOINT commands.
+- ENTRYPOINT should be defined when using the container as an executable.
+- CMD should be used as a way of defining default arguments for an ENTRYPOINT command or for executing an ad-hoc command in a container.
+- CMD will be overridden when running the container with alternative arguments.
+
+下表说明了不同的 ENTRYPOINT/CMD 命令组合是如何被执行的:
+
+| | No ENTRYPOINT | ENTRYPOINT exec_entry p1_entry | ENTRYPOINT [“exec_entry”, “p1_entry”] |
+| :------| :------ | :------ | :------ |
+| No CMD | error, not allowed | /bin/sh -c exec_entry p1_entry | exec_entry p1_entry |
+| CMD [“exec_cmd”, “p1_cmd”] | exec_cmd p1_cmd | /bin/sh -c exec_entry p1_entry | exec_entry p1_entry exec_cmd p1_cmd |
+| CMD [“p1_cmd”, “p2_cmd”] | p1_cmd p2_cmd | /bin/sh -c exec_entry p1_entry | exec_entry p1_entry p1_cmd p2_cmd |
+| CMD exec_cmd p1_cmd | /bin/sh -c exec_cmd p1_cmd | /bin/sh -c exec_entry p1_entry | exec_entry p1_entry /bin/sh -c exec_cmd p1_cmd |
+
 ## LABEL
 LABEL 指令可为 image 添加元数据. 一个 label 是一个 key/value pair. 一个 image 可以有多个 LABEL. Docker 官方建议多个 labels 使用一个 LABEL 指令去定义.
 
@@ -174,6 +190,50 @@ Note: The directory itself is not copied, just its contents.
 - If multiple <src> resources are specified, either directly or due to the use of a wildcard, then <dest> must be a directory, and it must end with a slash /.
 - If <dest> does not end with a trailing slash, it will be considered a regular file and the contents of <src> will be written at <dest>.
 - If <dest> doesn’t exist, it is created along with all missing directories in its path.
+
+## VOLUME
+```
+VOLUME ["/var/log/"]
+VOLUME /var/log
+VOLUME /var/log /var/db
+```
+VOLUME 指令使用给定名字创建挂载点(mount point) 并且这个挂载点持有来自外部宿主机或其它 container 的卷(volume). 
+
+docker run 命令在创建 container 时, 挂载点所使用到的目录或 volume 里的文件(如有)对当前挂载点仍然可见.
+
+NOTE:
+- 想加载特定的宿主机目录, 则必须在创建或运行 container 时才能指定. Dockerfile 里 VOLUME 命令所创建加载点使用的宿主机目录是形如 "/var/lib/docker/vfs/dir/cde167197ccc3e138a14f1a4f".
+- 如果在 volume 已经声明之后有任何编译步骤改变了 volume 里的数据, 这些改变会被丢弃.
+
+## USER
+```
+USER daemon
+```
+USER 指令设置 user name 或 UID, 以该身份运行 image 及 Dockerfile 中在 USER 指令之后的任何 RUN, CMD 和 ENTRYPOINT 指令.
+
+
+## WORKDIR
+```
+WORKDIR /path/to/WORKDIR
+```
+WORKDIR 指令为它之后声明的 RUN, CMD, ENTRYPOINT, COPY 和 ADD 指令设置工作目录. 如果 WORKDIR 目录不存在, 它仍会被创建, 甚至如果随后的 Dockerfile 指令根本没有用到它.
+
+在 Dockerfile 中这个指令可以使用多次. 如果提供的是相对路径, 那么它是相对于之前 WORKDIR 指令的目录.
+
+WORKDIR 指令能解析在它之前所设置的环境变量.
+
+## ARG
+```
+ARG <name>[=<default value>]
+```
+
+## ONBUILD
+
+## STOPSIGNAL
+
+## HEALTHCHECK
+
+## SHELL
 
 ## .dockerignore file
 
