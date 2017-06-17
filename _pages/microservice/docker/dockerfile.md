@@ -228,10 +228,58 @@ ARG <name>[=<default value>]
 ```
 
 ## ONBUILD
+```
+ONBUILD [INSTRUCTION]
+```
+ONBUILD 指令向 image 中添加了一个 trigger 指令, 这个 trigger 指令会在这个 image 作为 base 去创建新的 image 时被执行.
+任何编译指令都可以注册为 trigger.
+例如有如下 Dockerfile:
+```
+[...]
+ONBUILD ADD . /app/src
+ONBUILD RUN /usr/local/bin/python-build --dir /app/src
+[...]
+```
+当基于这个 Dockerfile 的 image 去创建新的 image 时, 作为处理 FROM 指令的一部分, 会查找 ONBUILD 的 trigger 并按顺序执行. 如果 trigger 执行失败, FROM 指令也会被终止; 如果 trigger 执行成功, FROM 指令也执行成功, 则整个创建过程像往常一样继续下去.
 
 ## STOPSIGNAL
+```
+STOPSIGNAL signal
+```
+STOPSIGNAL 指令设置系统调用信号发送给 container 通知其退出. 信号可以是数字如 9, 也可以是信号名称如 SIGKILL.
 
 ## HEALTHCHECK
+HEALTHCHECK 指令有 2 种形式:
+```
+HEALTHCHECK [OPTIONS] CMD command (通过在 container 中运行命令去检查 container health)
+HEALTHCHECK NONE (禁止从 base image 继承的任何 healthcheck)
+```
+HEALTHCHECK 指令告诉 Docker 怎样去测试容器是否还正常工作.
+
+当一个 container 指定了 healthcheck, 它的正常状态值后会带有健康状态. 这个值初始是 starting. 当 health check 成功, 它会变成 healthy (不论之前是什么状态). 当持续多次(特定次数)失败后, 它会变为 unhealthy.
+
+在 CMD 之前的 options 可以是:
+```
+--interval=DURATION (default: 30s)
+--timeout=DURATION (default: 30s)
+--retries=N (default: 3)
+```
+
+只有在连续多次 health check 失败后, 才会认为 container 是 unhealthy.
+
+在一个 Dockerfile 里只能有一个 HEALTHCHECK 指令. 如果列出了多个, 那么也只有最后那个 HEALTHCHECK 指令才会真正有效.
+
+CMD 关键字后的命令可以是一个 shell 命令 (e.g. HEALTHCHECK CMD /bin/check-running) 也可以是一个 exec 数组 (跟 ENTRYPOINT 类似的).
+
+命令的退出状态表明 container 的健康状况. 可能的值有:
+- 0: success - the container is healthy and ready for use
+- 1: unhealthy - the container is not working correctly
+- 2: reserved - do not use this exit code
+
+例如, 每 5 分钟检查一次 web server 是否还能在 3s 内生成网站主页:
+```
+HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost/ || exit 1
+```
 
 ## SHELL
 
