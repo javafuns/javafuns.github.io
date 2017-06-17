@@ -205,6 +205,8 @@ NOTE:
 - 想加载特定的宿主机目录, 则必须在创建或运行 container 时才能指定. Dockerfile 里 VOLUME 命令所创建加载点使用的宿主机目录是形如 "/var/lib/docker/vfs/dir/cde167197ccc3e138a14f1a4f".
 - 如果在 volume 已经声明之后有任何编译步骤改变了 volume 里的数据, 这些改变会被丢弃.
 
+More: [深入理解 Docker Volume](http://dockone.io/article/128)
+
 ## USER
 ```
 USER daemon
