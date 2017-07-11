@@ -24,6 +24,12 @@ NOTE: 某些情况下, 比如需要更改 escape 字符, 需使用 parser direct
 FROM <image>
 ```
 
+除了选择现有镜像为基础镜像外, Docker 还存在一个特殊的镜像, 名为 scratch. 这个镜像是虚拟的概念, 并不实际存在, 它表示一个空白的镜像.
+```
+FROM scratch
+```
+如果你以 scratch 为基础镜像的话, 意味着你不以任何镜像为基础, 接下来所写的指令将作为镜像第一层开始存在.
+
 ## ENV
 定义环境变量, 可以 $variable_name or ${variable_name} 形式在 Dockerfile 中引用.
 
