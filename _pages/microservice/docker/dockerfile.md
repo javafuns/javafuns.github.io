@@ -300,7 +300,9 @@ No, The RUN instruction will execute any commands in a new layer on top of the c
 The core concepts of Docker where commits are cheap and containers can be created from any point in an image’s history, much like source control.
 
 ## 为什么要把多个命令 RUN apt-get update && apt-get install -y --force-yes apache2 写到一行?
-cache 失效问题
+cache 失效问题:
+- https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/#build-cache
+- https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/#run
 
 ## RUN, CMD, ENTRYPOINT 区别
 
