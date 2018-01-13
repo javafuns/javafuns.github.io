@@ -22,3 +22,11 @@ HEAD 表示当前版本，上一个版本就是HEAD^，上上一个版本就是H
 
 ## git reset --soft HEAD~3
 将最后 3 个 commit 记录从本地版本库中去除，但文件处于 staging area 中且文件内容保持不变。修改文件后，可以再次提交到本地版本库。
+
+## git reflog
+查看操作历史:
+```
+bb01a23 HEAD@{1}: reset: moving to HEAD^^
+093355b HEAD@{2}: commit: explain 'git reset --soft'
+```
+与 git log 的区别是，git log 只能查看到版本库中的 commit，那些 git reset 过的 commit 信息是看不到的。
