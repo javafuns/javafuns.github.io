@@ -7,10 +7,10 @@ markdown:
 timezone:
 
 collections:
-  posts:
-    layout: post
-    output: true
-    permalink: /:collection/:path
+  #posts:
+  #  layout: post
+  #  output: true
+  #  permalink: /:collection/:path
   pages:
     layout: default
     output: true
