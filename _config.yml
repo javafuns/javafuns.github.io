@@ -7,6 +7,10 @@ markdown:
 timezone:
 
 collections:
+  posts:
+    layout: post
+    output: true
+    permalink: /:collection/:path
   pages:
     layout: default
     output: true
@@ -22,14 +26,14 @@ defaults:
       #permalink: /:title
   -
     scope:
-      path: ""
+      path: "_posts"
       type: "posts"
     values:
       layout: "post"
       permalink: /posts/:categories/:year/:month/:day/:title
   -
     scope:
-      path: ""
+      path: "_pages"
       type: "pages"
     values:
       layout: "default"
