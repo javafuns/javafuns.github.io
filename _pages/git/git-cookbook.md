@@ -17,8 +17,8 @@ tags: git github
     - [为 git 的 https repo 保存密码](#%E4%B8%BA-git-%E7%9A%84-https-repo-%E4%BF%9D%E5%AD%98%E5%AF%86%E7%A0%81)
     - [git status](#git-status)
     - [git diff --cached](#git-diff---cached)
-    - [git reset --hard HEAD~3](#git-reset---hard-head3)
-    - [git reset --soft HEAD~3](#git-reset---soft-head3)
+    - [git reset \-\-hard HEAD~3](#git-reset---hard-head3)
+    - [git reset \-\-soft HEAD~3](#git-reset---soft-head3)
     - [git reflog](#git-reflog)
   - [git repository management](#git-repository-management)
   - [branch 管理](#branch-%E7%AE%A1%E7%90%86)
@@ -63,11 +63,11 @@ git config credential.helper store
 
 查看 staged 文件与 HEAD 文件之间的 diff 
 
-### git reset --hard HEAD~3
+### git reset \-\-hard HEAD~3
 
 最后 3 个 commit 有问题，想要丢弃(包括本地版本库中的 commit 信息以及文件内容以及工作区文件)，版本库及工作区里的文件变为 3 个版本之前的内容。
 
-### git reset --soft HEAD~3
+### git reset \-\-soft HEAD~3
 
 将最后 3 个 commit 记录从本地版本库中去除，但文件处于 staging area 中且文件内容保持不变。修改文件后，可以再次提交到本地版本库。
 
