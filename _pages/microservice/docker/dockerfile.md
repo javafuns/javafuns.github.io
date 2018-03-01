@@ -6,6 +6,8 @@ categories: docker
 tags: docker
 ---
 
+# Table of Contents
+
 * [Overview](#overview)
 * [Dockerfile instructions](#dockerfile-instructions)
   * [FROM](#from)
