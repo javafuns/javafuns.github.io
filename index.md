@@ -1,7 +1,7 @@
 ---
 title: Hello GitHub
 ---
-<h1>hello</h1>
+<h1>Javafuns Pages</h1>
 I'm hosted with GitHub Pages.
 
 ### Todo list:
