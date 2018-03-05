@@ -372,3 +372,5 @@ cache 失效问题:
 ## RUN, CMD, ENTRYPOINT 区别
 
 ## ADD 和 COPY 区别
+
+虽然 ADD 和 COPY 功能类似，但一般优先使用 COPY。因为它比 ADD 更透明。COPY 只支持简单将本地文件拷贝到容器中，而 ADD 有一些并不明显的功能（比如本地 tar 提取和远程 URL 支持）。因此，ADD 的最佳用例是将本地 tar 文件自动解压缩提取到镜像中，例如 ADD rootfs.tar.xz。
