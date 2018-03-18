@@ -8,9 +8,40 @@
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <style>
+      .navigator {
+        max-width: 80rem;
+        margin: 0 auto;
+        font-size: 1.1rem;
+      }
+
+      .navigator ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .navigator ul li {
+        float: left;
+      }
+
+      .navigator ul li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      .navigator ul li a:hover {
+        background-color: #111;
+      }
+    </style>
   </head>
   <body>
-    <section class="page-header">
+    <section class="page-header" style="padding: 2rem 6rem">
       <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
       {% if site.github.is_project_page %}
@@ -22,7 +53,18 @@
       {% endif %}
     </section>
 
-    <section class="main-content">
+    <section style="background-color: #666;">
+      <div class="navigator">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/">Pages</a></li>
+          <li><a href="/posts/">Posts</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="main-content" style="max-width: 80rem; padding: 2rem 2rem;">
       {{ content }}
 
       <footer class="site-footer">
