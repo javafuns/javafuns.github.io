@@ -8,27 +8,37 @@ tags: git github
 
 # Git cookbook
 
-- [Git cookbook](#git-cookbook)
-  - [一些基本概念](#%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
-    - [staged](#staged)
-    - [HEAD](#head)
-  - [一些不常用的命令](#%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4)
-    - [创建版本库](#%E5%88%9B%E5%BB%BA%E7%89%88%E6%9C%AC%E5%BA%93)
-    - [为 git 的 https repo 保存密码](#%E4%B8%BA-git-%E7%9A%84-https-repo-%E4%BF%9D%E5%AD%98%E5%AF%86%E7%A0%81)
-    - [git status](#git-status)
-    - [git diff --cached](#git-diff---cached)
-    - [git reset \-\-hard HEAD~3](#git-reset---hard-head3)
-    - [git reset \-\-soft HEAD~3](#git-reset---soft-head3)
-    - [git reflog](#git-reflog)
-  - [git repository management](#git-repository-management)
-  - [branch 管理](#branch-%E7%AE%A1%E7%90%86)
-  - [tag 管理](#tag-%E7%AE%A1%E7%90%86)
+* [Git cookbook](#git-cookbook)
+  * [一些基本概念](#%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+    * [remote repository](#remote-repository)
+    * [local repository](#local-repository)
+    * [staged](#staged)
+    * [HEAD](#head)
+  * [一些不常用的命令](#%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4)
+    * [创建版本库](#%E5%88%9B%E5%BB%BA%E7%89%88%E6%9C%AC%E5%BA%93)
+    * [为 git 的 https repo 保存密码](#%E4%B8%BA-git-%E7%9A%84-https-repo-%E4%BF%9D%E5%AD%98%E5%AF%86%E7%A0%81)
+    * [git status](#git-status)
+    * [git diff --cached](#git-diff---cached)
+    * [git reset \-\-hard HEAD~3](#git-reset---hard-head3)
+    * [git reset \-\-soft HEAD~3](#git-reset---soft-head3)
+    * [git reflog](#git-reflog)
+  * [git repository management](#git-repository-management)
+  * [branch 管理](#branch-%E7%AE%A1%E7%90%86)
+  * [tag 管理](#tag-%E7%AE%A1%E7%90%86)
 
 ## 一些基本概念
 
+### remote repository
+
+远程库
+
+### local repository
+
+将远程库 clone 到本地得到本地库
+
 ### staged
 
-通过多次执行 git add 把文件放入 staging area，相当于缓冲区，等待 git commit 一次性提交。
+通过多次执行 git add 把文件放入 staging area，相当于缓冲区，等待 git commit 一次性提交到 local repository。
 
 ### HEAD
 
