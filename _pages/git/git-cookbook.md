@@ -71,7 +71,7 @@ git config credential.helper store
 
 ### git diff --cached
 
-查看 staged 文件与 HEAD 文件之间的 diff 
+查看 staged 文件与 HEAD 文件之间的 diff
 
 ### git reset \-\-hard HEAD~3
 
@@ -104,7 +104,7 @@ git remove <name> # 删除与本地版本库相关联的远程版本库
 
 ## branch 管理
 
-```
+```properties
 查看分支：git branch
 创建分支：git branch <name>
 切换分支：git checkout <name>
@@ -127,4 +127,3 @@ git tag # 列出所有 tag
 git push origin <tag name> # 将本地 tag push 到远程版本库
 git push origin --tags # 一次性推送全部尚未推送到远程的本地标签
 ```
-
