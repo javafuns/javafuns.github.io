@@ -8,19 +8,22 @@ tags: python
 
 # Table of Content
 
-* [Python 基础](#python-%E5%9F%BA%E7%A1%80)
-  * [标识符](#%E6%A0%87%E8%AF%86%E7%AC%A6)
-  * [变量](#%E5%8F%98%E9%87%8F)
-    * [变量作用域](#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F)
-  * [数据类型](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B)
-  * [控制语句](#%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5)
-  * [运算符](#%E8%BF%90%E7%AE%97%E7%AC%A6)
-  * [集合](#%E9%9B%86%E5%90%88)
-  * [表达式](#%E8%A1%A8%E8%BE%BE%E5%BC%8F)
-  * [函数](#%E5%87%BD%E6%95%B0)
-  * [面向对象](#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1)
-  * [module and package](#module-and-package)
-* [References](#references)
+<!-- TOC -->
+
+- [Python 基础](#python-基础)
+  - [标识符](#标识符)
+  - [变量](#变量)
+    - [变量作用域](#变量作用域)
+  - [数据类型](#数据类型)
+  - [控制语句](#控制语句)
+  - [运算符](#运算符)
+  - [集合](#集合)
+  - [表达式](#表达式)
+  - [函数](#函数)
+  - [面向对象](#面向对象)
+  - [module and package](#module-and-package)
+- [I/O](#io)
+- [References](#references)
 
 # Python 基础
 
@@ -196,6 +199,11 @@ f.eat("earthworm")
 * package(包):
 > 包是一个分层次的文件目录结构。  
 > 通过目录中包含 \_\_init\_\_.py 文件，将包与普通目录区分开来的。
+
+# I/O
+
+* File 对象: file 对象提供了操作文件的一系列方法。
+* OS 对象: 提供了处理文件及目录的一系列方法。
 
 # References
 
