@@ -15,7 +15,7 @@ featured-condition-size: 1
 
 collections:
   blog:
-    layout: post
+    layout: posts
     output: true
   pages:
     layout: default
