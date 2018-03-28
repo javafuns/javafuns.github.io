@@ -6,11 +6,17 @@ disqus_shortname:
 markdown:
 timezone:
 
+paginate: 10
+paginate_path: "blog/page:num/"
+
+# Featured Tags
+featured-tags: true
+featured-condition-size: 1
+
 collections:
-  #posts:
-  #  layout: post
-  #  output: true
-  #  permalink: /:collection/:path
+  blog:
+    layout: post
+    output: true
   pages:
     layout: default
     output: true
@@ -30,7 +36,14 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      permalink: /posts/:categories/:year/:month/:day/:title
+      permalink: /blog/:categories/:year/:month/:day/:title
+  -
+    scope:
+      path: "blog"
+      type: "posts"
+    values:
+      layout: "post"
+      permalink: /:collection/:categories/:year/:month/:day/:title
   -
     scope:
       path: "_pages"
