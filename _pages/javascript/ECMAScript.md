@@ -1,5 +1,4 @@
 ---
-layout: default
 title:  "ECMAScript introduction!"
 date:   2018-03-05 12:51:01 +0800
 categories: javascript

@@ -1,5 +1,4 @@
 ---
-layout: default
 title:  "Python Basic"
 date:   2018-03-16 11:01:01 +0800
 categories: python

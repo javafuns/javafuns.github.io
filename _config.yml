@@ -14,11 +14,8 @@ featured-tags: true
 featured-condition-size: 1
 
 collections:
-  blog:
-    layout: posts
-    output: true
   pages:
-    layout: default
+    layout: page
     output: true
     permalink: /:collection/:path
 
@@ -39,14 +36,7 @@ defaults:
       permalink: /blog/:categories/:year/:month/:day/:title
   -
     scope:
-      path: "blog"
-      type: "posts"
-    values:
-      layout: "post"
-      permalink: /:collection/:categories/:year/:month/:day/:title
-  -
-    scope:
       path: "_pages"
       type: "pages"
     values:
-      layout: "default"
+      layout: "page"

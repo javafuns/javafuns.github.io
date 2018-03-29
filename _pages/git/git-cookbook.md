@@ -1,5 +1,4 @@
 ---
-layout: default
 title:  "Git Cookbook"
 date:   2018-01-26 14:26:01 +0800
 categories: git
