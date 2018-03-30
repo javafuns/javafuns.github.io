@@ -1,0 +1,100 @@
+---
+---
+@import "{{ site.theme }}";
+html {
+  font-size: 16px;
+}
+a {
+  color: #07c;
+}
+
+.page-header {
+  margin: 0;
+}
+
+.navigation-header {
+  background-color: #666;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+.navigator {
+  max-width: 80rem;
+  margin: 0 auto;
+  font-size: 1.1rem;
+}
+
+.navigator ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navigator ul li {
+  float: left;
+}
+
+.navigator ul li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 1em 1em;
+  text-decoration: none;
+}
+
+.navigator ul li a:hover {
+  background-color: #111;
+}
+
+
+.page-content-container {
+  background-color: #333;
+  border-radius: 1em;
+  padding: 1.5em;
+  margin-bottom: 1em;
+}
+
+.page-content-container h1 a {
+  color: #159957;
+}
+
+.page-content-container h1 a:focus {
+  color: #23527c;
+  text-decoration: underline;
+}
+
+.page-content-container h1 a:hover {
+  color: #23527c;
+  text-decoration: none;
+}
+
+.page-attributes span {
+  margin-right: 0.6em;
+}
+
+.page-attributes {
+  display: inline-block;
+}
+
+.page-author {
+
+}
+
+.page-categories {
+
+}
+
+.page-tags {
+
+}
+
+.content {
+  color: #FFF;
+}
+
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+  color: #FFF;
+}
