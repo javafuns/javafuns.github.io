@@ -3,9 +3,18 @@
 title: Pages
 permalink: /pages/
 ---
-<h1>{{ page.title }}</h1>
+<h1>{{ site.title }}</h1>
+
+{% for cate in site.page-categories %}
 <ul class="posts">
-  {% for page in site.pages %}
-    <li><span></span> » <a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></li>
-  {% endfor %}
+  <li>
+    {{ cate }}:
+    {% for page in site.pages %}
+      {% if page.categories contains cate %}
+        <ul><span></span> » <a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></ul>
+      {% endif %}
+    {% endfor %}
+  </li>
 </ul>
+{% endfor %}
+

@@ -6,6 +6,9 @@ disqus_shortname:
 markdown:
 timezone:
 
+# Listing all of categories of Pages (not for Posts)
+page-categories: [linux, git, javascript, python, microservice, docker, kubernetes]
+
 paginate: 10
 paginate_path: "blog/page:num/"
 
