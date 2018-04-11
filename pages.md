@@ -32,6 +32,19 @@ permalink: /pages/
   </div>
 
   <div class="page-content-container">
+    <div><h1>JavaScript</h1></div>
+    <div class="content">
+      {% for page in site.pages %}
+        {% if page.categories contains 'javascript' %}
+          <div>
+            <span><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="page-content-container">
     <div><h1>Docker</h1></div>
     <div class="content">
       {% for page in site.pages %}
