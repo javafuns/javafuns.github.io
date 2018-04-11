@@ -4,6 +4,8 @@ title: Pages
 permalink: /pages/
 ---
 
+<h1>{{ site.title }}</h1>
+
 <div style="max-width: 100%; padding: 1rem 0; display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 10px;">
   <div class="page-content-container">
     <div><h1>Linux</h1></div>
