@@ -285,9 +285,13 @@ WORKDIR 指令能解析在它之前所设置的环境变量.
 
 ## ARG
 
+构建参数 ARG 和 ENV 的效果一样，都是设置环境变量。所不同的是，ARG 所设置的构建环境的环境变量，只在 build image 时有效。
+
 ```bash
 ARG <name>[=<default value>]
 ```
+
+ARG 指令定义参数名称，以及定义其默认值。该默认值可以在构建命令 docker build 中用 --build-arg <参数名>=<值> 来覆盖。
 
 ## ONBUILD
 
