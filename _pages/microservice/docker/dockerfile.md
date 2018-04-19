@@ -252,12 +252,12 @@ VOLUME /var/log
 VOLUME /var/log /var/db
 ```
 
-VOLUME 指令使用给定名字创建挂载点(mount point) 并且这个挂载点持有来自外部宿主机或其它 container 的卷(volume). 
+VOLUME 指令使用给定名字创建挂载点(mount point) 并且这个挂载点持有来自外部宿主机或其它 container 的卷(volume) 或者目录. 
 
-docker run 命令在创建 container 时, 挂载点所使用到的目录或 volume 里的文件(如有)对当前挂载点仍然可见.
+docker run 命令在创建 container 时, 挂载点所用到目录或 volume 里的文件(如有)对当前挂载点仍然可见.
 
 NOTE:
-- 想加载特定的宿主机目录, 则必须在创建或运行 container 时才能指定. Dockerfile 里 VOLUME 命令所创建加载点使用的宿主机目录是形如 "/var/lib/docker/vfs/dir/cde167197ccc3e138a14f1a4f".
+- Dockerfile 里 VOLUME 命令所创建加载点使用的宿主机目录是形如 "/var/lib/docker/vfs/dir/cde167197ccc3e138a14f1a4f", 想加载特定的宿主机目录, 则必须在创建或运行 container 时(通过 -v 参数)指定.
 - 如果在 volume 已经声明之后有任何编译步骤改变了 volume 里的数据, 这些改变会被丢弃.
 
 More: [深入理解 Docker Volume](http://dockone.io/article/128)
