@@ -209,3 +209,4 @@ f.eat("earthworm")
 
 * [Wikipedia - Python](https://zh.wikipedia.org/wiki/Python)
 * [W3Cschool - Python](https://www.w3cschool.cn/python)
+* [Python 3 教程](https://www.w3cschool.cn/python3/)
