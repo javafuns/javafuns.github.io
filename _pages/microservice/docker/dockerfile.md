@@ -30,6 +30,7 @@ tags: docker
   * [HEALTHCHECK](#healthcheck)
   * [SHELL](#shell)
   * [.dockerignore file](#dockerignore-file)
+* [Multi-stage build](#multi-stage-build)
 * [FAQ](#faq)
   * [Dockerfile 中指令之间是否有依赖关系?](#dockerfile-中指令之间是否有依赖关系)
   * [为什么要把多个命令 RUN apt-get update && apt-get install -y --force-yes apache2 写到一行?](#为什么要把多个命令-run-apt-get-update--apt-get-install--y---force-yes-apache2-写到一行)
@@ -347,6 +348,28 @@ HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost/ || exit 1
 ## SHELL
 
 ## .dockerignore file
+
+# Multi-stage build
+
+Multi-stage builds are a new feature requiring Docker 17.05 or higher on the daemon and client.
+
+With multi-stage builds, you use multiple FROM statements in your Dockerfile. Each FROM instruction can use a different base, and each of them begins a new stage of the build. You can selectively copy artifacts from one stage to another, leaving behind everything you don’t want in the final image.
+
+Sample:
+
+```bash
+FROM golang:1.7.3 as builder
+WORKDIR /go/src/github.com/alexellis/href-counter/
+RUN go get -d -v golang.org/x/net/html
+COPY app.go    .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /go/src/github.com/alexellis/href-counter/app .
+CMD ["./app"]
+```
 
 # FAQ
 
