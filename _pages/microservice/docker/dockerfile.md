@@ -7,6 +7,7 @@ tags: docker
 
 # Table of Contents
 
+* [Table of Contents](#table-of-contents)
 * [Overview](#overview)
 * [Dockerfile instructions](#dockerfile-instructions)
   * [FROM](#from)
@@ -14,11 +15,10 @@ tags: docker
   * [RUN](#run)
   * [CMD](#cmd)
   * [ENTRYPOINT](#entrypoint)
-    * [理解 CMD 和 ENTRYPOINT 如何交互](#%E7%90%86%E8%A7%A3-cmd-%E5%92%8C-entrypoint-%E5%A6%82%E4%BD%95%E4%BA%A4%E4%BA%92)
+    * [理解 CMD 和 ENTRYPOINT 如何交互](#理解-cmd-和-entrypoint-如何交互)
   * [LABEL](#label)
   * [MAINTAINER (deprecated)](#maintainer-deprecated)
   * [EXPOSE](#expose)
-  * [ENV](#env)
   * [ADD](#add)
   * [COPY](#copy)
   * [VOLUME](#volume)
@@ -30,11 +30,12 @@ tags: docker
   * [HEALTHCHECK](#healthcheck)
   * [SHELL](#shell)
   * [.dockerignore file](#dockerignore-file)
+* [Multi-stage build](#multi-stage-build)
 * [FAQ](#faq)
-  * [Dockerfile 中指令之间是否有依赖关系?](#dockerfile-%E4%B8%AD%E6%8C%87%E4%BB%A4%E4%B9%8B%E9%97%B4%E6%98%AF%E5%90%A6%E6%9C%89%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB)
-  * [为什么要把多个命令 RUN apt-get update && apt-get install -y --force-yes apache2 写到一行?](#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8A%8A%E5%A4%9A%E4%B8%AA%E5%91%BD%E4%BB%A4-run-apt-get-update-apt-get-install--y---force-yes-apache2-%E5%86%99%E5%88%B0%E4%B8%80%E8%A1%8C)
-  * [RUN, CMD, ENTRYPOINT 区别](#run-cmd-entrypoint-%E5%8C%BA%E5%88%AB)
-  * [ADD 和 COPY 区别](#add-%E5%92%8C-copy-%E5%8C%BA%E5%88%AB)
+  * [Dockerfile 中指令之间是否有依赖关系?](#dockerfile-中指令之间是否有依赖关系)
+  * [为什么要把多个命令 RUN apt-get update && apt-get install -y --force-yes apache2 写到一行?](#为什么要把多个命令-run-apt-get-update--apt-get-install--y---force-yes-apache2-写到一行)
+  * [RUN, CMD, ENTRYPOINT 区别](#run-cmd-entrypoint-区别)
+  * [ADD 和 COPY 区别](#add-和-copy-区别)
 
 # Overview
 
@@ -64,7 +65,9 @@ FROM scratch
 
 ## ENV
 
-定义环境变量, 可以 $variable_name or ${variable_name} 形式在 Dockerfile 中引用.
+ENV 指令设置环境变量. 设置过的环境变量对后续的 Dockerfile 命令都是可见的, 可以 $variable_name or ${variable_name} 形式在 Dockerfile 中引用.
+
+与 LABEL 指令一样, 如果想设置多个环境变量, 尽可能使用一个 ENV 指令完成设置.
 
 例子:
 ```bash
@@ -83,7 +86,6 @@ ENV <key>=<value> <key1>=<value1> ...
 - WORKDIR
 - VOLUME
 - STOPSIGNAL
-及
 - ONBUILD (when combined with one of the supported instructions above)
 
 ## RUN
@@ -176,17 +178,6 @@ EXPOSE <port> [<port>...]
 ```
 
 EXPOSE 指令告诉 Docker 该 container 在运行时所监听的网络端口. EXPOSE 指令并不会使该端口对宿主机(host)可见(accessible). 要想让宿主机访问 container 的端口, 在 docker run 时必须使用 -p flag 公开一组端口范围或使用 -P flag 公开所有 exposed ports. expose 端口和公开给外部访问的端口不要求是同一个 number.
-
-## ENV
-
-```bash
-ENV <key> <value>
-ENV <key>=<value> ...
-```
-
-ENV 指令设置环境变量. 设置过的环境变量对后续的 Dockerfile 命令都是可见的.
-
-与 LABEL 指令一样, 如果想设置多个环境变量, 尽可能使用一个 ENV 指令完成设置.
 
 ## ADD
 
@@ -357,6 +348,28 @@ HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost/ || exit 1
 ## SHELL
 
 ## .dockerignore file
+
+# Multi-stage build
+
+Multi-stage builds are a new feature requiring Docker 17.05 or higher on the daemon and client.
+
+With multi-stage builds, you use multiple FROM statements in your Dockerfile. Each FROM instruction can use a different base, and each of them begins a new stage of the build. You can selectively copy artifacts from one stage to another, leaving behind everything you don’t want in the final image.
+
+Sample:
+
+```bash
+FROM golang:1.7.3 as builder
+WORKDIR /go/src/github.com/alexellis/href-counter/
+RUN go get -d -v golang.org/x/net/html
+COPY app.go    .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /go/src/github.com/alexellis/href-counter/app .
+CMD ["./app"]
+```
 
 # FAQ
 
